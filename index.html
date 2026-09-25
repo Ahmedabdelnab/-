@@ -419,8 +419,8 @@
 
     <script>
         // === تهيئة Supabase المباشرة للمشروع ===
-        const SUPABASE_URL = 'https://hX_8nzY-Wv4bEWTOAj3Xpw_MzJg6pk0.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_hX_8nzY-Wv4bEWTOAj3Xpw_MzJg6pk0';
+        const SUPABASE_URL = 'https://FIhCnhGiBw1Bz9DLBPL4cg.supabase.co';
+        const SUPABASE_KEY = 'sb_publishable_FIhCnhGiBw1Bz9DLBPL4cg_L66EDgpK';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // جلب التهاني من قاعدة البيانات وعرضها
@@ -457,7 +457,7 @@
                 .insert([{ author: author, text: text }]);
 
             if (error) {
-                alert('حدث خطأ أثناء حفظ التهنئة، تأكد من إيقاف RLS لجدول wishes في Supabase.');
+                alert('حدث خطأ أثناء حفظ التهنئة.');
                 console.error(error);
                 return;
             }
