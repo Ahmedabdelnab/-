@@ -415,7 +415,7 @@
     </main>
 
     <script>
-        // === رابط Google Sheets Apps Script API ===
+        // === رابط Google Sheets Web App الصحيح والمباشر ===
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUJT2s2ZsI-I478r7T7-SfTWpNW8jiaee7ZJQ15Y9FpctsZsiFsPRdhRc3CTp4aDZL/exec';
 
         // دالة جلب التهاني من Google Sheets وعرضها
@@ -454,7 +454,7 @@
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ author: author, text: text })
                 });
 
@@ -468,7 +468,7 @@
 
                 setTimeout(() => {
                     loadWishes();
-                }, 1000);
+                }, 1500);
 
             } catch (error) {
                 alert('حدث خطأ أثناء حفظ التهنئة.');
