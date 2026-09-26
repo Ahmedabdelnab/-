@@ -333,7 +333,7 @@
             </div>
         </section>
 
-        <!-- تأكيد الحضور (RSVP) -->
+        <!-- تأكيد الحضور (RSVP) متصل بشيت Google بشكل سري -->
         <section class="relative z-10 glass-card p-8 md:p-12 rounded-3xl space-y-8 border-t-4 border-t-gold-500">
             <div class="text-center space-y-2">
                 <h2 class="font-ruqaa text-3xl md:text-4xl text-gold-300">تأكيد الحضور (RSVP)</h2>
@@ -354,7 +354,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600 text-royal-950 font-bold hover:brightness-110 transition-all cursor-pointer">
+                <button type="submit" id="rsvpSubmitBtn" class="w-full py-4 rounded-xl bg-gradient-to-r from-gold-600 via-gold-400 to-gold-600 text-royal-950 font-bold hover:brightness-110 transition-all cursor-pointer">
                     تأكيد الحضور
                 </button>
             </form>
@@ -455,7 +455,7 @@
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ author: author, text: text })
+                    body: JSON.stringify({ type: 'wish', author: author, text: text })
                 });
 
                 document.getElementById('wishesForm').reset();
@@ -476,6 +476,41 @@
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.innerText = 'إرسال التهنئة ✨';
+            }
+        }
+
+        // دالة إرسال تأكيد الحضور إلى Google Sheets
+        async function handleRSVP(e) {
+            e.preventDefault();
+            const rsvpSubmitBtn = document.getElementById('rsvpSubmitBtn');
+            const name = document.getElementById('guestName').value;
+            const attendance = document.getElementById('attendance').value;
+            const msgBox = document.getElementById('rsvpMessage');
+
+            rsvpSubmitBtn.disabled = true;
+            rsvpSubmitBtn.innerText = 'جاري التسجيل... ✨';
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ type: 'rsvp', name: name, attendance: attendance })
+                });
+
+                msgBox.innerHTML = `
+                    <p class="text-lg font-bold text-gold-400">شكراً جزيلاً أ/ ${name} ✨</p>
+                    <p class="text-sm text-stone-200">تم تسجيل ردك بنجاح، ونسعد جداً بتواجدك ومشاركتك لنا هذه اللحظات السعيدة!</p>
+                `;
+                msgBox.classList.remove('hidden');
+
+                document.getElementById('rsvpForm').reset();
+            } catch (error) {
+                alert('حدث خطأ أثناء تسجيل ردك.');
+                console.error(error);
+            } finally {
+                rsvpSubmitBtn.disabled = false;
+                rsvpSubmitBtn.innerText = 'تأكيد الحضور';
             }
         }
 
@@ -622,21 +657,6 @@
         }
         setInterval(updateCountdown, 1000);
         updateCountdown();
-
-        // RSVP Form Handler
-        function handleRSVP(e) {
-            e.preventDefault();
-            const name = document.getElementById('guestName').value;
-            const msgBox = document.getElementById('rsvpMessage');
-
-            msgBox.innerHTML = `
-                <p class="text-lg font-bold text-gold-400">شكراً جزيلاً أ/ ${name} ✨</p>
-                <p class="text-sm text-stone-200">تم تسجيل ردك بنجاح، ونسعد جداً بتواجدك ومشاركتك لنا هذه اللحظات السعيدة!</p>
-            `;
-            msgBox.classList.remove('hidden');
-
-            document.getElementById('rsvpForm').reset();
-        }
     </script>
 </body>
 </html>
